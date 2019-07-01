@@ -3,11 +3,11 @@ extends Node2D
 # Declare member variables here. Examples:
 # var a = 2
 # var b = "text"
-var num_rooms = 10
+var num_rooms = 20
 var min_size = 5
 var max_size = 10
 var tile_size = 16
-var hspread = 100
+var hspread = 70
 
 var Room = preload("res://Room.tscn")
 
@@ -54,11 +54,11 @@ func find_mst(nodes):
 					nextmin_node = q
 					current_node = p
 							
-			var n = path.get_available_point_id()
-			path.add_point(n, nextmin_node)
-			#path.connect_points(current_node, n)
-			path.connect_points(path.get_closest_point(current_node), n)
-			nodes.erase(nextmin_node)				
+		var n = path.get_available_point_id()
+		path.add_point(n, nextmin_node)
+		#path.connect_points(current_node, n)
+		path.connect_points(path.get_closest_point(current_node), n)
+		nodes.erase(nextmin_node)				
 	print ("MST complete!")
 	path_set = true
 	pass
@@ -72,7 +72,13 @@ func _draw():
 			for edge in path.get_point_connections(path_id):
 				draw_line(Vector2(path.get_point_position(path_id).x, path.get_point_position(path_id).y),
 							Vector2(path.get_point_position(edge).x, path.get_point_position(edge).y),
-							Color(0, 1, 0))
+							Color(0, 1, 0), 2, true)
+	#if (path_set == true):
+	#	for p in path.get_points():
+	#		for c in path.get_point_connections(p):
+	#			var pp = path.get_point_position(p)
+	#			var cp = path.get_point_position(c)
+	#			draw_line(Vector2(pp.x, pp.y), Vector2(cp.x, cp.y), Color(0, 0, 1), 2, true)
 			
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
