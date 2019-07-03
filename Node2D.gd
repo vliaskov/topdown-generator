@@ -10,6 +10,7 @@ var tile_size = 16
 var hspread = 70
 
 var Room = preload("res://Room.tscn")
+onready var Map = $TileMap
 
 var path = null
 var path_set = false
@@ -80,6 +81,8 @@ func _draw():
 	#			var cp = path.get_point_position(c)
 	#			draw_line(Vector2(pp.x, pp.y), Vector2(cp.x, cp.y), Color(0, 0, 1), 2, true)
 			
+
+
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	update()
@@ -90,12 +93,26 @@ func _input(event):
 		for r in $Rooms.get_children():
 			r.queue_free()
 		make_rooms()
+	if (event.is_action_pressed('ui_focus_next')):
+		print ("tab")
+		make_map()
 		
-		
-			
-			
-	
-	
-	
 
+func make_map():
+	Map.clear()
+	var full_rect = Rect2()
+	for room in $Rooms.get_children():
+		var r = Rect2(room.position - room.size, 
+					room.get_node("CollisionShape2D").shape.extents * 2)
+		#room.size * 2)
+		full_rect = full_rect.merge(r)
+	var topleft = Map.world_to_map(full_rect.position)
+	var bottomright = Map.world_to_map(full_rect.end)
+	for x in range(topleft.x, bottomright.x):
+		for y in range(topleft.y, bottomright.y):
+			Map.set_cell(x, y, 1)
+			
+		
+		
+		
 
